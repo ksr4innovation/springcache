@@ -51,7 +51,7 @@ public class UserService {
 	}
 
 	
-	@Cacheable(value="userAddCache")
+	@Cacheable(value="getUsers")
 	public List<User> getAllUser() {
 		
 		System.out.println("  From GetAllUser    DB call");
@@ -84,16 +84,24 @@ public class UserService {
 	@Cacheable(value="userAddCache",key="#user1.getName()")
 	public User getByUser(User user1) {
 
+		System.out.println("   From  @Cacheable getByUser    ::::::::::::::::::::::::::::::::::::::::::::::::   ");
+		
 		UserEntity user = userRepository.findByName(user1.getName());
 		User u = new User(user.getName(), user.getDesg());
 		u.setCompName(user.getCompName());
 	
+		
+		throw new CacheUserNotFoundException("CE001","You can not cache the this user data");
 
-		return u;
+		//return u;
 	}
 	
 	@CachePut(value="userAddCache" ,key="#user1.getName()")
 	public User updateCache(User user1) {
+		
+		
+		System.out.println("   From  @CachePut updateCache    ::::::::::::::::::::::::::::::::::::::::::::::::   ");
+		
 
 		UserEntity user = userRepository.findByName(user1.getName());
 		user.setDesg(user1.getDesg());
@@ -113,13 +121,13 @@ public class UserService {
 		System.out.println("    Removing from Cache data from EhCache ");
 	}
 	
-	public UserInfo findUserAddByName(User user1) {
+	public User findUserAddByName(User user1) {
 
 		UserEntity user = userRepository.getUserEntity(user1.getName());
 		
 		
-		UserInfo u = new UserInfo(user.getName(), user.getDesg());
-		u.setShareValue("Test");
+		User u = new User(user.getName(), user.getDesg());
+		
 		u.setCompName(user.getCompName());
 		
 		user.getAddressEntity().forEach(add -> {
@@ -183,7 +191,9 @@ public class UserService {
 			userList.add(u);
 		});
 
-		return userList;
+	//	return userList;
+		
+		throw new UserNotFoundException("UN001","User not found in repository");
 
 	}
 }

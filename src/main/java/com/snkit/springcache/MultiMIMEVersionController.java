@@ -3,7 +3,6 @@ package com.snkit.springcache;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,7 +74,7 @@ public class MultiMIMEVersionController {
 			consumes= {"application/vnd.snkit-v1+json","application/vnd.snkit-v1+xml"} ,
 			produces = { "application/vnd.snkit-v1+json","application/vnd.snkit-v1+xml" }
 			)
-	public UserInfo findUserAddByName(@RequestBody User user) {
+	public User findUserAddByName(@RequestBody User user) {
 		return userService.findUserAddByName(user);
 	}
 	
